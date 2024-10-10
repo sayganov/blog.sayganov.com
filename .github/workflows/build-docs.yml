@@ -10,7 +10,7 @@ permissions:
   pages: write
 
 env:
-  INSTANCE: 'Writerside/bi'
+  INSTANCE: 'Blog/bi'
   ARTIFACT: 'webBlogBI2-all.zip'
   DOCKER_VERSION: '242.21870'
 
