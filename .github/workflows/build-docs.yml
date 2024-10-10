@@ -1,4 +1,4 @@
-name: Build documentation
+name: Build Test Deploy
 
 on:
   push:
@@ -33,11 +33,12 @@ jobs:
       - name: Save artifact with build results
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT }}
+          name: docs
           path: |
             artifacts/${{ env.ARTIFACT }}
             artifacts/report.json
           retention-days: 7
+
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -45,13 +46,14 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.ARTIFACT }}
+          name: docs
           path: artifacts
 
       - name: Test documentation
         uses: JetBrains/writerside-checker-action@v1
         with:
           instance: ${{ env.INSTANCE }}
+
   deploy:
     environment:
       name: github-pages
@@ -62,13 +64,13 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.ARTIFACT }}
+          name: docs
 
       - name: Unzip artifact
         run: unzip -O UTF-8 -qq '${{ env.ARTIFACT }}' -d dir
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Package and upload Pages artifact
         uses: actions/upload-pages-artifact@v3
